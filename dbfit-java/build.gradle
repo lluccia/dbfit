@@ -225,6 +225,18 @@ project('oracle') {
     }
 }
 
+project('oracle-mock-extension') {
+    description = 'DBFit Oracle Mock extension'
+
+    dependencies {
+        compile project(':dbfit-java:core')
+        compile project(':dbfit-java:oracle')
+        compile 'dummy:ojdbc6:11.2.0.3.0@jar'
+        compile publicOracleCompileDeps
+        testCompile "org.mockito:mockito-core:${mockitoVersion}"
+    }
+}
+
 def publicMysqlCompileDeps = [
     'mysql:mysql-connector-java:5.1.36'
 ]

@@ -13,6 +13,20 @@ import java.util.Map;
 
 
 public interface DBEnvironment {
+	
+	/**
+     * Meta-data retrieval method that provides source code for a given
+     * stored procedure or function name. The name may contain a schema
+     * qualifier.
+     *
+     * While implementing, use {@link dbfit.util.NameNormaliser} to make sure parameters
+     * are mapped properly.
+     *
+     * Parameters that map to return values should have an empty string for the
+     * name.
+     */
+//	String getSource(String procName) throws SQLException;
+	
     /**
      * Meta-data retrieval method that provides a list of parameters for a given
      * stored procedure or function name. The name may contain a schema
