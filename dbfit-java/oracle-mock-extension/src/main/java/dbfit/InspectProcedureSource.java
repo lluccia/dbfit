@@ -1,38 +1,38 @@
 package dbfit;
 
-import java.sql.SQLException;
-
-import dbfit.api.DBEnvironment;
 import dbfit.api.DbStoredProcedure;
-import dbfit.fixture.StatementExecution;
-import dbfit.util.DbParameterAccessor;
-import dbfit.util.DbParameterAccessors;
+import dbfit.environment.OracleMockEnvironment;
+import dbfit.util.Log;
 import fit.Fixture;
 import fit.Parse;
 
 public class InspectProcedureSource extends Fixture {
 
-	private DBEnvironment dbEnvironment;
+	private DbStoredProcedure dbStoredProcedure;
+	private OracleMockEnvironment dbEnvironment;
 	private String procName;
     
-	public InspectProcedureSource(DBEnvironment dbEnvironment, String procName) {
+	public InspectProcedureSource(OracleMockEnvironment dbEnvironment, String procName) {
 		this.dbEnvironment = dbEnvironment;
 		this.procName = procName;
 	}
 
 	@Override
 	public void doTable(Parse table) {
-		DbStoredProcedure dbStoredProcedure = new DbStoredProcedure(dbEnvironment, procName);
-		DbParameterAccessors accessors = new DbParameterAccessors();
-		try {
-			StatementExecution statement = dbStoredProcedure.buildPreparedStatement(accessors.toArray());
-			
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		super.doTable(table);
+		try {
+			String source = dbEnvironment.getProcedureSource(procName);
+			
+			createRows(table, source);
+		} catch (Exception e) {
+			Log.log(e);
+            createRows(table, e.getMessage());		}
+	}
+	
+	private void createRows(Parse table, String source) {
+		Parse pre = new Parse("pre", Fixture.gray(source), null, null);
+		Parse nameCell = new Parse("td", null, pre, null);
+        Parse newRow = new Parse("tr", null, nameCell, null);
+    	table.parts.more = newRow;
 	}
 }
