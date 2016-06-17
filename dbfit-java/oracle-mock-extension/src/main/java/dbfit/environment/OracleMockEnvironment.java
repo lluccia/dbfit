@@ -9,26 +9,35 @@ import dbfit.util.Log;
 
 @DatabaseEnvironment(name="OracleMock", driver="oracle.jdbc.OracleDriver")
 public class OracleMockEnvironment extends OracleEnvironment {
-
+	
+	private static final int MAX_CLOB_LENGTH = 50000;
+	
 	public OracleMockEnvironment(String driverClassName) {
 		super(driverClassName);
 	}
 
 	public String getProcedureSource(String procName) throws SQLException {
-		String query = "SELECT TEXT FROM USER_SOURCE WHERE NAME = ? ORDER BY LINE";
+		String query = "SELECT DBMS_METADATA.GET_DDL(OBJECT_TYPE, OBJECT_NAME) SOURCE " +
+				"FROM                                        " +
+				"    ALL_OBJECTS                             " +
+				"WHERE                                       " +
+				"    OBJECT_TYPE IN ('FUNCTION','PROCEDURE') " +
+				"    AND OBJECT_NAME = ?                     ";
 		String[] queryParameters = { procName };
 		
-		StringBuilder source = new StringBuilder();
+		Object source = null;
 		try (CallableStatement dc = openDbCallWithParameters(query, queryParameters)) {
             Log.log("executing query");
             ResultSet rs = dc.executeQuery();
-
-            while (rs.next()) {
-            	source.append(rs.getString(1));
+            
+            if (rs.next()) {
+            	source = rs.getObject(1);
+            } else {
+            	throw new IllegalArgumentException(String.format("Procedure or function not found: %s", procName));
             }
         }
 		
-		return "CREATE OR REPLACE " + source.toString();
+		return clobToString(source);
 	}
 	
 	private CallableStatement openDbCallWithParameters(String query,
@@ -41,6 +50,22 @@ public class OracleMockEnvironment extends OracleEnvironment {
         }
 
         return dc;
+    }
+	
+    public String clobToString(Object o) throws SQLException {
+        if (o == null)
+            return null;
+        if (!(o instanceof oracle.sql.CLOB)) {
+            throw new UnsupportedOperationException(
+                    "OracleClobNormaliser cannot work with " + o.getClass());
+        }
+        oracle.sql.CLOB clob = (oracle.sql.CLOB) o;
+        if (clob.length() > MAX_CLOB_LENGTH)
+            throw new UnsupportedOperationException("Clobs larger than "
+                    + MAX_CLOB_LENGTH + " bytes are not supported by DBFIT");
+        char[] buffer = new char[MAX_CLOB_LENGTH];
+        int total = clob.getChars(1, MAX_CLOB_LENGTH, buffer);
+        return String.valueOf(buffer, 0, total);
     }
 
 }

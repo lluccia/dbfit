@@ -2,7 +2,6 @@ package dbfit;
 
 import dbfit.api.DbStoredProcedure;
 import dbfit.environment.OracleMockEnvironment;
-import dbfit.util.Log;
 import fit.Fixture;
 import fit.Parse;
 
@@ -25,8 +24,8 @@ public class InspectProcedureSource extends Fixture {
 			
 			createRows(table, source);
 		} catch (Exception e) {
-			Log.log(e);
-            createRows(table, e.getMessage());		}
+			exception(table.parts.parts, e);
+        }
 	}
 	
 	private void createRows(Parse table, String source) {
