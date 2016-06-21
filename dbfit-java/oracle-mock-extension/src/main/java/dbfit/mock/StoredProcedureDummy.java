@@ -84,8 +84,7 @@ public class StoredProcedureDummy {
         orderedParameters.addAll(parameters);
         
         for (OracleDbParameterAccessor paramAccessor: parameters)
-            if(paramAccessor.doesNotHaveDirection(Direction.RETURN_VALUE))
-                orderedParameters.set(paramAccessor.getPosition(), paramAccessor);
+            orderedParameters.set(paramAccessor.getPosition(), paramAccessor);
         
         return orderedParameters;
     }
@@ -100,20 +99,16 @@ public class StoredProcedureDummy {
         return parameters;
     }
     
+    private boolean isFunction() {
+        return getReturnValue() != null;
+    }
+    
     private OracleDbParameterAccessor getReturnValue() {
         for (OracleDbParameterAccessor paramAccessor: allParams.values())
             if(paramAccessor.hasDirection(Direction.RETURN_VALUE))
                 return paramAccessor;
         
         return null;
-    }
-    
-    private boolean isFunction() {
-        for (OracleDbParameterAccessor paramAccessor: allParams.values())
-            if(paramAccessor.hasDirection(Direction.RETURN_VALUE))
-                return true;
-        
-        return false;
     }
     
 }
