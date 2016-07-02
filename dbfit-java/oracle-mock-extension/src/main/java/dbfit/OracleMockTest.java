@@ -26,7 +26,10 @@ public class OracleMockTest extends OracleTest {
     }
 
     public Fixture createDummy(String procName) throws SQLException {
-
+        String originalDDL = ((OracleMockEnvironment) environment).getProcedureSource(procName);
+        ((OracleMockEnvironment) environment).addMockedObject(procName, originalDDL);
+        
+        
         Map<String, DbParameterAccessor> allParams = environment.getAllProcedureParameters(procName);
         
         if (allParams.isEmpty()){
