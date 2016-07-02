@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import dbfit.util.DbParameterAccessor;
 import dbfit.util.Direction;
 import dbfit.util.OracleDbParameterAccessor;
 
@@ -29,7 +30,7 @@ public class StoredProcedureDummyTest {
     public void canBuildProcedureDDLWithParameters() {
         StoredProcedureDummy spDummy = new StoredProcedureDummy("procname");
 
-        Map<String, OracleDbParameterAccessor> paramMap = new HashMap<String, OracleDbParameterAccessor>();
+        Map<String, DbParameterAccessor> paramMap = new HashMap<String, DbParameterAccessor>();
         paramMap.put("param1", createParameter(0, "PARAM1", Direction.INPUT, "VARCHAR2"));
         paramMap.put("param2", createParameter(1, "PARAM2", Direction.INPUT, "NUMBER"));
         paramMap.put("param3", createParameter(2, "PARAM3", Direction.INPUT, "INTEGER"));
@@ -47,7 +48,7 @@ public class StoredProcedureDummyTest {
     public void canBuildFunctionDDL() {
         StoredProcedureDummy spDummy = new StoredProcedureDummy("functionname");
 
-        Map<String, OracleDbParameterAccessor> paramMap = new HashMap<String, OracleDbParameterAccessor>();
+        Map<String, DbParameterAccessor> paramMap = new HashMap<String, DbParameterAccessor>();
         paramMap.put("", createParameter(-1, "", Direction.RETURN_VALUE, "VARCHAR2"));
         
         spDummy.setAllParams(paramMap);
@@ -61,7 +62,7 @@ public class StoredProcedureDummyTest {
     public void canBuildFunctionDDLWithParameters() {
         StoredProcedureDummy spDummy = new StoredProcedureDummy("functionname");
 
-        Map<String, OracleDbParameterAccessor> paramMap = new HashMap<String, OracleDbParameterAccessor>();
+        Map<String, DbParameterAccessor> paramMap = new HashMap<String, DbParameterAccessor>();
         paramMap.put("", createParameter(-1, "", Direction.RETURN_VALUE, "VARCHAR2"));
         paramMap.put("param1", createParameter(0, "PARAM1", Direction.INPUT, "VARCHAR2"));
         paramMap.put("param2", createParameter(1, "PARAM2", Direction.INPUT, "NUMBER"));

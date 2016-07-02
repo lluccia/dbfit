@@ -5,20 +5,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import dbfit.util.DbParameterAccessor;
 import dbfit.util.Direction;
 import dbfit.util.OracleDbParameterAccessor;
 
 public class StoredProcedureDummy {
 
     private String name;
-    private Map<String, OracleDbParameterAccessor> allParams = new HashMap<String, OracleDbParameterAccessor>();;
+    private Map<String, DbParameterAccessor> allParams = new HashMap<String, DbParameterAccessor>();;
 
     public StoredProcedureDummy(String name) {
         this.name = name;
     }
 
-    public void setAllParams(Map<String, OracleDbParameterAccessor> paramMap) {
-        this.allParams = paramMap;
+    public void setAllParams(Map<String, DbParameterAccessor> allParams) {
+        this.allParams = allParams;
     }
 
     public String buildDDL() {
@@ -34,7 +35,7 @@ public class StoredProcedureDummy {
     }
 
     private String buildParameters() {
-        List<OracleDbParameterAccessor> orderedParameters = getOrderedParameters();
+        List<DbParameterAccessor> orderedParameters = getOrderedParameters();
         if (orderedParameters.isEmpty())
             return "";
         else {
@@ -42,7 +43,7 @@ public class StoredProcedureDummy {
         	
         	int paramCount = 0;
         	
-        	for (OracleDbParameterAccessor paramAccessor: orderedParameters) {
+        	for (DbParameterAccessor paramAccessor: orderedParameters) {
         	    parametersDeclaration.append(paramAccessor.getName());
         	    parametersDeclaration.append(" ");
         	    
@@ -51,7 +52,7 @@ public class StoredProcedureDummy {
         	    else if (paramAccessor.hasDirection(Direction.INPUT_OUTPUT))
         	        parametersDeclaration.append("IN OUT ");
         	    
-        	    parametersDeclaration.append(paramAccessor.getOriginalTypeName());
+        	    parametersDeclaration.append(((OracleDbParameterAccessor) paramAccessor).getOriginalTypeName());
         	    
         	    if (++paramCount < orderedParameters.size())
         	        parametersDeclaration.append(", ");
@@ -72,27 +73,27 @@ public class StoredProcedureDummy {
     
     private String getReturnValueType() {
         if (isFunction())
-            return getReturnValue().getOriginalTypeName();
+            return ((OracleDbParameterAccessor) getReturnValue()).getOriginalTypeName();
         else
             return null;
     }
 
-    private List<OracleDbParameterAccessor> getOrderedParameters() {
-        List<OracleDbParameterAccessor> parameters = getParameters();
-        List<OracleDbParameterAccessor> orderedParameters = new ArrayList<OracleDbParameterAccessor>(parameters.size());
+    private List<DbParameterAccessor> getOrderedParameters() {
+        List<DbParameterAccessor> parameters = getParameters();
+        List<DbParameterAccessor> orderedParameters = new ArrayList<DbParameterAccessor>(parameters.size());
         
         orderedParameters.addAll(parameters);
         
-        for (OracleDbParameterAccessor paramAccessor: parameters)
+        for (DbParameterAccessor paramAccessor: parameters)
             orderedParameters.set(paramAccessor.getPosition(), paramAccessor);
         
         return orderedParameters;
     }
     
-    private List<OracleDbParameterAccessor> getParameters() {
-        List<OracleDbParameterAccessor> parameters = new ArrayList<OracleDbParameterAccessor>(allParams.size());
+    private List<DbParameterAccessor> getParameters() {
+        List<DbParameterAccessor> parameters = new ArrayList<DbParameterAccessor>(allParams.size());
         
-        for (OracleDbParameterAccessor paramAccessor: allParams.values())
+        for (DbParameterAccessor paramAccessor: allParams.values())
             if(paramAccessor.doesNotHaveDirection(Direction.RETURN_VALUE))
                 parameters.add(paramAccessor);
         
@@ -103,8 +104,8 @@ public class StoredProcedureDummy {
         return getReturnValue() != null;
     }
     
-    private OracleDbParameterAccessor getReturnValue() {
-        for (OracleDbParameterAccessor paramAccessor: allParams.values())
+    private DbParameterAccessor getReturnValue() {
+        for (DbParameterAccessor paramAccessor: allParams.values())
             if(paramAccessor.hasDirection(Direction.RETURN_VALUE))
                 return paramAccessor;
         
