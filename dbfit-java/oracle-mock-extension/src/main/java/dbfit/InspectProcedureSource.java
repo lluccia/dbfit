@@ -1,13 +1,11 @@
 package dbfit;
 
-import dbfit.api.DbStoredProcedure;
 import dbfit.environment.OracleMockEnvironment;
 import fit.Fixture;
 import fit.Parse;
 
 public class InspectProcedureSource extends Fixture {
 
-	private DbStoredProcedure dbStoredProcedure;
 	private OracleMockEnvironment dbEnvironment;
 	private String procName;
     
