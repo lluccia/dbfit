@@ -9,12 +9,12 @@ import dbfit.util.DbParameterAccessor;
 import dbfit.util.Direction;
 import dbfit.util.OracleDbParameterAccessor;
 
-public class StoredProcedureDummy {
+public class ProcedureDummy {
 
     private String name;
-    private Map<String, DbParameterAccessor> allParams = new HashMap<String, DbParameterAccessor>();;
+    protected Map<String, DbParameterAccessor> allParams = new HashMap<>();
 
-    public StoredProcedureDummy(String name) {
+    public ProcedureDummy(String name) {
         this.name = name;
     }
 
@@ -28,10 +28,14 @@ public class StoredProcedureDummy {
                     " " + name.toUpperCase() +
                     buildParameters() +
                     " " + buildReturnTypeDeclaration() +
-                    "IS BEGIN " + 
-                    (isFunction() ? "RETURN " : "") +
-                    "NULL; " +
+                    "IS\n" +
+                    "BEGIN\n" + 
+                    buildBody() +
                     "END;";
+    }
+
+    protected String buildBody() {
+        return (isFunction() ? "RETURN " : "") + "NULL; ";
     }
 
     private String buildParameters() {
@@ -72,10 +76,7 @@ public class StoredProcedureDummy {
     }
     
     private String getReturnValueType() {
-        if (isFunction())
-            return ((OracleDbParameterAccessor) getReturnValue()).getOriginalTypeName();
-        else
-            return null;
+        return ((OracleDbParameterAccessor) getReturnValue()).getOriginalTypeName();
     }
 
     private List<DbParameterAccessor> getOrderedParameters() {

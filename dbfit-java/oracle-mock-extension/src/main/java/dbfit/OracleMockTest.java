@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.Map;
 
 import dbfit.environment.OracleMockEnvironment;
-import dbfit.mock.StoredProcedureDummy;
+import dbfit.mock.ProcedureDummy;
 import dbfit.util.DbParameterAccessor;
 import dbfit.util.DdlStatementExecution;
 import dbfit.util.oracle.mockextensions.HelloMock;
@@ -32,7 +32,8 @@ public class OracleMockTest extends OracleTest {
         
         Map<String, DbParameterAccessor> allParams = environment.getAllProcedureParameters(procName);
         
-        StoredProcedureDummy spDummy = new StoredProcedureDummy(procName);
+        ProcedureDummy spDummy = new ProcedureDummy(procName);
+
         spDummy.setAllParams(allParams);
         String dummyDDL = spDummy.buildDDL();
         
