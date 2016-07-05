@@ -32,12 +32,6 @@ public class OracleMockTest extends OracleTest {
         
         Map<String, DbParameterAccessor> allParams = environment.getAllProcedureParameters(procName);
         
-        if (allParams.isEmpty()){
-            throw new SQLException(
-                    "Cannot retrieve list of parameters for procedure " +
-                        procName + " - check spelling and access rights");
-        }
-        
         StoredProcedureDummy spDummy = new StoredProcedureDummy(procName);
         spDummy.setAllParams(allParams);
         String dummyDDL = spDummy.buildDDL();
