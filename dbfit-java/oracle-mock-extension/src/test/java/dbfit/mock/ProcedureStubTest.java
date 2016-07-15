@@ -14,10 +14,6 @@ import dbfit.util.OracleDbParameterAccessor;
 
 public class ProcedureStubTest {
 
-    private String normalizeSpaces(String input) {
-        return input.replaceAll("\\s+", " ");
-    }
-    
     @Test(expected=IllegalArgumentException.class)
     public void procedureWithNoOutputParametersCannotBeStubbed() {
         ProcedureStub procedureStub = new ProcedureStub("procname");
@@ -47,11 +43,8 @@ public class ProcedureStubTest {
         
         procedureStub.setAllParams(paramMap);
         
-        Map<String, Object> stubMap = new HashMap<String, Object>();
-        stubMap.put("PARAM1", "STUBBED_VALUE");
-        stubMap.put("PARAM2", 1);
-        
-        procedureStub.setStubValues(stubMap);
+        procedureStub.setStubValue("PARAM1", "STUBBED_VALUE");
+        procedureStub.setStubValue("PARAM2", 1);
         
         procedureStub.validate();
         
@@ -70,10 +63,7 @@ public class ProcedureStubTest {
         
         procedureStub.setAllParams(paramMap);
         
-        Map<String, Object> stubMap = new HashMap<String, Object>();
-        stubMap.put("", "STUBBED_VALUE");
-        
-        procedureStub.setStubValues(stubMap);
+        procedureStub.setStubValue("", "STUBBED_VALUE");
         
         procedureStub.validate();
         
@@ -93,12 +83,9 @@ public class ProcedureStubTest {
         
         procedureStub.setAllParams(paramMap);
         
-        Map<String, Object> stubMap = new HashMap<String, Object>();
-        stubMap.put("", "STUBBED_VALUE");
-        stubMap.put("PARAM1", "STUBBED_VALUE_PARAM1");
-        stubMap.put("PARAM2", 1);
-        
-        procedureStub.setStubValues(stubMap);
+        procedureStub.setStubValue("", "STUBBED_VALUE");
+        procedureStub.setStubValue("PARAM1", "STUBBED_VALUE_PARAM1");
+        procedureStub.setStubValue("PARAM2", 1);
         
         procedureStub.validate();
         

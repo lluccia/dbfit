@@ -19,10 +19,10 @@ public class ProcedureStub extends ProcedureDummy {
         super(name);
     }
 
-    public void setStubValues(Map<String, Object> stubValues) {
-        this.stubValues = stubValues;
+    public void setStubValue(String name, Object value) {
+        this.stubValues.put(name, value);
     }
-
+    
     public void validate() {
         List<DbParameterAccessor> outputParameters = getOutputParameters();
         
