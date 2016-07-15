@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Map;
 
 import dbfit.environment.OracleMockEnvironment;
+import dbfit.fixture.InspectProcedureSource;
 import dbfit.mock.ProcedureDummy;
 import dbfit.util.DbParameterAccessor;
 import dbfit.util.DdlStatementExecution;

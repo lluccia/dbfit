@@ -1,4 +1,4 @@
-package dbfit;
+package dbfit.fixture;
 
 import dbfit.environment.OracleMockEnvironment;
 import fit.Fixture;
