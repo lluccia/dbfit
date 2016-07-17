@@ -26,7 +26,7 @@ public class ProcedureStubTest {
         ProcedureStub procedureStub = new ProcedureStub("procname");
         
         Map<String, DbParameterAccessor> paramMap = new HashMap<String, DbParameterAccessor>();
-        paramMap.put("PARAM1", createParameter(1, "PARAM1", Direction.OUTPUT, "VARCHAR2"));
+        paramMap.put("param1", createParameter(1, "PARAM1", Direction.OUTPUT, "VARCHAR2"));
         
         procedureStub.setAllParams(paramMap);
         
@@ -38,8 +38,8 @@ public class ProcedureStubTest {
         ProcedureStub procedureStub = new ProcedureStub("procname");
         
         Map<String, DbParameterAccessor> paramMap = new HashMap<String, DbParameterAccessor>();
-        paramMap.put("PARAM1", createParameter(1, "PARAM1", Direction.OUTPUT, "VARCHAR2"));
-        paramMap.put("PARAM2", createParameter(2, "PARAM2", Direction.OUTPUT, "NUMBER"));
+        paramMap.put("param1", createParameter(1, "PARAM1", Direction.OUTPUT, "VARCHAR2"));
+        paramMap.put("param2", createParameter(2, "PARAM2", Direction.OUTPUT, "NUMBER"));
         
         procedureStub.setAllParams(paramMap);
         
@@ -78,8 +78,8 @@ public class ProcedureStubTest {
         
         Map<String, DbParameterAccessor> paramMap = new HashMap<String, DbParameterAccessor>();
         paramMap.put("", createParameter(-1, "", Direction.RETURN_VALUE, "VARCHAR2"));
-        paramMap.put("PARAM1", createParameter(1, "PARAM1", Direction.OUTPUT, "VARCHAR2"));
-        paramMap.put("PARAM2", createParameter(2, "PARAM2", Direction.OUTPUT, "NUMBER"));
+        paramMap.put("param1", createParameter(1, "PARAM1", Direction.OUTPUT, "VARCHAR2"));
+        paramMap.put("param2", createParameter(2, "PARAM2", Direction.OUTPUT, "NUMBER"));
         
         procedureStub.setAllParams(paramMap);
         

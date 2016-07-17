@@ -30,7 +30,6 @@ public class OracleMockTest extends OracleTest {
         String originalDDL = ((OracleMockEnvironment) environment).getProcedureSource(procName);
         ((OracleMockEnvironment) environment).addMockedObject(procName, originalDDL);
         
-        
         Map<String, DbParameterAccessor> allParams = environment.getAllProcedureParameters(procName);
         
         ProcedureDummy spDummy = new ProcedureDummy(procName);
@@ -43,4 +42,9 @@ public class OracleMockTest extends OracleTest {
         
         return new InspectProcedureSource((OracleMockEnvironment) environment, procName);
     }
+    
+    public Fixture createStub(String procName) {
+        return new dbfit.fixture.CreateStub((OracleMockEnvironment) environment, procName);
+    }
+    
 }

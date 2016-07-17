@@ -64,9 +64,9 @@ public class ProcedureStub extends ProcedureDummy {
     }
     
     private boolean isVarchar(String parameterName) {
-        OracleDbParameterAccessor dbParameterAccessor = (OracleDbParameterAccessor) allParams.get(parameterName);
+        OracleDbParameterAccessor dbParameterAccessor = (OracleDbParameterAccessor) allParams.get(parameterName.toLowerCase());
         
-        return dbParameterAccessor.getOriginalTypeName().equals("VARCHAR2");
+        return "VARCHAR2".equals(dbParameterAccessor.getOriginalTypeName());
     }
 
     private List<DbParameterAccessor> getOutputParameters() {
