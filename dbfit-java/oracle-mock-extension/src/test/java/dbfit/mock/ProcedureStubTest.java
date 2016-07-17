@@ -13,7 +13,11 @@ import dbfit.util.Direction;
 import dbfit.util.OracleDbParameterAccessor;
 
 public class ProcedureStubTest {
-
+    
+    private String normalizeSpaces(String input) {
+        return input.replaceAll("\\s+", " ").trim();
+    }
+    
     @Test(expected=IllegalArgumentException.class)
     public void procedureWithNoOutputParametersCannotBeStubbed() {
         ProcedureStub procedureStub = new ProcedureStub("procname");
@@ -48,9 +52,9 @@ public class ProcedureStubTest {
         
         procedureStub.validate();
         
-        assertThat(procedureStub.buildBody(), is(
-                "PARAM2 := 1;\n" +
-                "PARAM1 := 'STUBBED_VALUE';\n"
+        assertThat(normalizeSpaces(procedureStub.buildBody()), is(
+                "PARAM2 := 1; " +
+                "PARAM1 := 'STUBBED_VALUE';"
             ));
     }
     
@@ -67,8 +71,8 @@ public class ProcedureStubTest {
         
         procedureStub.validate();
         
-        assertThat(procedureStub.buildBody(), is(
-                "RETURN 'STUBBED_VALUE';\n"
+        assertThat(normalizeSpaces(procedureStub.buildBody()), is(
+                "RETURN 'STUBBED_VALUE';"
             ));
     }
     
@@ -89,10 +93,10 @@ public class ProcedureStubTest {
         
         procedureStub.validate();
         
-        assertThat(procedureStub.buildBody(), is(
-                "PARAM2 := 1;\n" +
-                "PARAM1 := 'STUBBED_VALUE_PARAM1';\n" +
-                "RETURN 'STUBBED_VALUE';\n"
+        assertThat(normalizeSpaces(procedureStub.buildBody()), is(
+                "PARAM2 := 1; " +
+                "PARAM1 := 'STUBBED_VALUE_PARAM1'; " +
+                "RETURN 'STUBBED_VALUE';"
             ));
     }
     

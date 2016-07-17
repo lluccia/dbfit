@@ -45,11 +45,11 @@ public class ProcedureStub extends ProcedureDummy {
             Object value = stubValue.getValue();
             
             if ("".equals(parameterName))
-                returnValue = "RETURN " + 
+                returnValue = "  " + "RETURN " + 
                         buildParameterValue(parameterName, value) +
                         ";\n";
             else
-                body += parameterName + " := " +
+                body += "  " + parameterName + " := " +
                     buildParameterValue(parameterName, value) +
                     ";\n";
         }
