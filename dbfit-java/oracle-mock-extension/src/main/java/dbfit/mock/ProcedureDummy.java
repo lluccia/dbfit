@@ -35,7 +35,7 @@ public class ProcedureDummy {
     }
 
     protected String buildBody() {
-        return (isFunction() ? "RETURN " : "") + "NULL; ";
+        return (isFunction() ? "  RETURN " : "") + "  NULL;\n";
     }
 
     private String buildParameters() {
