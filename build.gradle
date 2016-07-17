@@ -215,7 +215,7 @@ task fastbuild(dependsOn: [
     ':dbfit-java:mysql:check',
     ':dbfit-java:netezza:check',
     ':dbfit-java:oracle:check',
-    ':dbfit-java:oracle-mock-extension:check',
+    ':dbfit-java:oracle-mock:check',
     ':dbfit-java:postgres:check',
     ':dbfit-java:sqlserver:check',
     ':dbfit-java:teradata:check',

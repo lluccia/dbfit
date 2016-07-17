@@ -1,6 +1,6 @@
 rootProject.name = 'dbfit'
 
-include ':dbfit-java', ':dbfit-java:core', ':dbfit-java:informix' ,':dbfit-java:mysql', ':dbfit-java:oracle', ':dbfit-java:oracle-mock-extension', ':dbfit-java:derby', ':dbfit-java:db2', ':dbfit-java:postgres', ':dbfit-java:hsqldb', ':dbfit-java:sqlserver', ':dbfit-java:teradata', ':dbfit-java:netezza'
+include ':dbfit-java', ':dbfit-java:core', ':dbfit-java:informix' ,':dbfit-java:mysql', ':dbfit-java:oracle', ':dbfit-java:oracle-mock', ':dbfit-java:derby', ':dbfit-java:db2', ':dbfit-java:postgres', ':dbfit-java:hsqldb', ':dbfit-java:sqlserver', ':dbfit-java:teradata', ':dbfit-java:netezza'
 
 project(':dbfit-java').projectDir = "$rootDir/dbfit-java" as File
 
@@ -8,7 +8,7 @@ project(':dbfit-java:core').projectDir = "$rootDir/dbfit-java/core" as File
 project(':dbfit-java:mysql').projectDir = "$rootDir/dbfit-java/mysql" as File
 project(':dbfit-java:informix').projectDir = "$rootDir/dbfit-java/informix" as File
 project(':dbfit-java:oracle').projectDir = "$rootDir/dbfit-java/oracle" as File
-project(':dbfit-java:oracle-mock-extension').projectDir = "$rootDir/dbfit-java/oracle-mock-extension" as File
+project(':dbfit-java:oracle-mock').projectDir = "$rootDir/dbfit-java/oracle-mock" as File
 project(':dbfit-java:derby').projectDir = "$rootDir/dbfit-java/derby" as File
 project(':dbfit-java:db2').projectDir = "$rootDir/dbfit-java/db2" as File
 project(':dbfit-java:postgres').projectDir = "$rootDir/dbfit-java/postgres" as File

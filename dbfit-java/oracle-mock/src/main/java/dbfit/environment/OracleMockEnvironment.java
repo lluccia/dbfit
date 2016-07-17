@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import dbfit.annotations.DatabaseEnvironment;
 import dbfit.util.DdlStatementExecution;
@@ -24,8 +23,10 @@ public class OracleMockEnvironment extends OracleEnvironment {
 
     public String getProcedureSource(String procName) throws SQLException {
         String query = "SELECT DBMS_METADATA.GET_DDL(OBJECT_TYPE, OBJECT_NAME) SOURCE "
-                + "FROM                                        " + "    ALL_OBJECTS                             "
-                + "WHERE                                       " + "    OBJECT_TYPE IN ('FUNCTION','PROCEDURE') "
+                + "FROM                                        "
+                + "    ALL_OBJECTS                             "
+                + "WHERE                                       "
+                + "    OBJECT_TYPE IN ('FUNCTION','PROCEDURE') "
                 + "    AND OBJECT_NAME = ?                     ";
         String[] queryParameters = { procName };
 
@@ -77,8 +78,7 @@ public class OracleMockEnvironment extends OracleEnvironment {
     }
 
     private void restoreMockedObjects() throws SQLException {
-        for (Entry<String, String> mockedObject: mockedObjects.entrySet()) {
-            String mockedDDL = mockedObject.getValue();
+        for (String mockedDDL : mockedObjects.values()) {
             DdlStatementExecution ddl = createDdlStatementExecution(mockedDDL);
             ddl.run();
         }

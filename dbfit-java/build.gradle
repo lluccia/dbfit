@@ -225,7 +225,7 @@ project('oracle') {
     }
 }
 
-project('oracle-mock-extension') {
+project('oracle-mock') {
     description = 'DBFit Oracle Mock extension'
 
     dependencies {
