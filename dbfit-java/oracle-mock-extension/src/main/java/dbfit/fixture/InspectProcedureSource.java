@@ -27,8 +27,8 @@ public class InspectProcedureSource extends Fixture {
 	}
 	
 	private void createRows(Parse table, String source) {
-		Parse pre = new Parse("pre", Fixture.gray(source), null, null);
-		Parse nameCell = new Parse("td", null, pre, null);
+		Parse pre = new Parse("pre", source.trim(), null, null);
+		Parse nameCell = new Parse("td colspan='2'", null, pre, null);
         Parse newRow = new Parse("tr", null, nameCell, null);
     	table.parts.more = newRow;
 	}
