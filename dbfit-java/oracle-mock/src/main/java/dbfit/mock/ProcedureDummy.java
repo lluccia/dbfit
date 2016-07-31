@@ -79,9 +79,9 @@ public class ProcedureDummy {
         return ((OracleDbParameterAccessor) getReturnValue()).getOriginalTypeName();
     }
 
-    private List<DbParameterAccessor> getOrderedParameters() {
+    protected List<DbParameterAccessor> getOrderedParameters() {
         List<DbParameterAccessor> parameters = getParameters();
-        List<DbParameterAccessor> orderedParameters = new ArrayList<DbParameterAccessor>(parameters.size());
+        List<DbParameterAccessor> orderedParameters = new ArrayList<>(parameters.size());
         
         orderedParameters.addAll(parameters);
         
@@ -92,7 +92,7 @@ public class ProcedureDummy {
     }
     
     private List<DbParameterAccessor> getParameters() {
-        List<DbParameterAccessor> parameters = new ArrayList<DbParameterAccessor>(allParams.size());
+        List<DbParameterAccessor> parameters = new ArrayList<>(allParams.size());
         
         for (DbParameterAccessor paramAccessor: allParams.values())
             if(paramAccessor.doesNotHaveDirection(Direction.RETURN_VALUE))

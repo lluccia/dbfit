@@ -69,7 +69,7 @@ public class ProcedureStub extends ProcedureDummy {
         return "VARCHAR2".equals(dbParameterAccessor.getOriginalTypeName());
     }
 
-    private List<DbParameterAccessor> getOutputParameters() {
+    protected List<DbParameterAccessor> getOutputParameters() {
         List<DbParameterAccessor> outputParameters = new ArrayList<>();
         
         for (DbParameterAccessor paramAccessor: allParams.values())
