@@ -1,7 +1,7 @@
 package dbfit.mock;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static dbfit.mock.TestUtils.assertNormalized;
+import static dbfit.mock.TestUtils.createParameter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,13 +10,8 @@ import org.junit.Test;
 
 import dbfit.util.DbParameterAccessor;
 import dbfit.util.Direction;
-import dbfit.util.OracleDbParameterAccessor;
 
 public class ProcedureStubTest {
-    
-    private String normalizeSpaces(String input) {
-        return input.replaceAll("\\s+", " ").trim();
-    }
     
     @Test(expected=IllegalArgumentException.class)
     public void procedureWithNoOutputParametersCannotBeStubbed() {
@@ -52,10 +47,11 @@ public class ProcedureStubTest {
         
         procedureStub.validate();
         
-        assertThat(normalizeSpaces(procedureStub.buildBody()), is(
+        assertNormalized(
+                procedureStub.buildBody(),
                 "PARAM2 := 1; " +
                 "PARAM1 := 'STUBBED_VALUE';"
-            ));
+            );
     }
     
     @Test
@@ -71,9 +67,10 @@ public class ProcedureStubTest {
         
         procedureStub.validate();
         
-        assertThat(normalizeSpaces(procedureStub.buildBody()), is(
+        assertNormalized(
+                procedureStub.buildBody(),
                 "RETURN 'STUBBED_VALUE';"
-            ));
+            );
     }
     
     @Test
@@ -93,22 +90,12 @@ public class ProcedureStubTest {
         
         procedureStub.validate();
         
-        assertThat(normalizeSpaces(procedureStub.buildBody()), is(
+        assertNormalized(
+                procedureStub.buildBody(),
                 "PARAM2 := 1; " +
                 "PARAM1 := 'STUBBED_VALUE_PARAM1'; " +
                 "RETURN 'STUBBED_VALUE';"
-            ));
+            );
     }
     
-    private OracleDbParameterAccessor createParameter(int position, String name, Direction direction, String type) {
-        return new OracleDbParameterAccessor(
-                name, 
-                direction,
-                0, 
-                null,
-                position,
-                null,
-                type, 
-                null);
-    }
 }

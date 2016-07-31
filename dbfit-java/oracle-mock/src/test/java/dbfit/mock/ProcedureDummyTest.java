@@ -1,7 +1,7 @@
 package dbfit.mock;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static dbfit.mock.TestUtils.assertNormalized;
+import static dbfit.mock.TestUtils.createParameter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,24 +10,22 @@ import org.junit.Test;
 
 import dbfit.util.DbParameterAccessor;
 import dbfit.util.Direction;
-import dbfit.util.OracleDbParameterAccessor;
 
 public class ProcedureDummyTest {
 	
-    private String normalizeSpaces(String input) {
-        return input.replaceAll("\\s+", " ");
-    }
-    
     @Test
     public void canBuildProcedureDDL() {
         ProcedureDummy spDummyProcName = new ProcedureDummy("procname");
 
-        assertThat(normalizeSpaces(spDummyProcName.buildDDL()),
-                is("CREATE OR REPLACE PROCEDURE PROCNAME IS BEGIN NULL; END;"));
+        assertNormalized(
+                spDummyProcName.buildDDL(),
+                "CREATE OR REPLACE PROCEDURE PROCNAME IS BEGIN NULL; END;");
 
         ProcedureDummy spDummyAnotherProcName = new ProcedureDummy("anotherprocname");
-        assertThat(normalizeSpaces(spDummyAnotherProcName.buildDDL()),
-                is("CREATE OR REPLACE PROCEDURE ANOTHERPROCNAME IS BEGIN NULL; END;"));
+        
+        assertNormalized(
+                spDummyAnotherProcName.buildDDL(),
+                "CREATE OR REPLACE PROCEDURE ANOTHERPROCNAME IS BEGIN NULL; END;");
     }
 
     @Test
@@ -43,8 +41,17 @@ public class ProcedureDummyTest {
         
         spDummy.setAllParams(paramMap);
         
-        assertThat(normalizeSpaces(spDummy.buildDDL()),
-                is("CREATE OR REPLACE PROCEDURE PROCNAME(PARAM1 VARCHAR2, PARAM2 NUMBER, PARAM3 INTEGER, PARAM4 OUT INTEGER, PARAM5 IN OUT INTEGER) IS BEGIN NULL; END;"));
+        assertNormalized(
+                spDummy.buildDDL(),
+                "CREATE OR REPLACE PROCEDURE PROCNAME("
+                + "PARAM1 VARCHAR2, "
+                + "PARAM2 NUMBER, "
+                + "PARAM3 INTEGER, "
+                + "PARAM4 OUT INTEGER, "
+                + "PARAM5 IN OUT INTEGER) IS "
+                + "BEGIN"
+                + " NULL; "
+                + "END;");
 
     }
     
@@ -57,8 +64,12 @@ public class ProcedureDummyTest {
         
         spDummy.setAllParams(paramMap);
         
-        assertThat(normalizeSpaces(spDummy.buildDDL()),
-                is("CREATE OR REPLACE FUNCTION FUNCTIONNAME RETURN VARCHAR2 IS BEGIN RETURN NULL; END;"));
+        assertNormalized(
+                spDummy.buildDDL(),
+                "CREATE OR REPLACE FUNCTION FUNCTIONNAME RETURN VARCHAR2 IS "
+                + "BEGIN"
+                + " RETURN NULL; "
+                + "END;");
 
     }
     
@@ -76,21 +87,19 @@ public class ProcedureDummyTest {
         
         spDummy.setAllParams(paramMap);
         
-        assertThat(normalizeSpaces(spDummy.buildDDL()),
-                is("CREATE OR REPLACE FUNCTION FUNCTIONNAME(PARAM1 VARCHAR2, PARAM2 NUMBER, PARAM3 INTEGER, PARAM4 OUT INTEGER, PARAM5 IN OUT INTEGER) RETURN VARCHAR2 IS BEGIN RETURN NULL; END;"));
+        assertNormalized(
+                spDummy.buildDDL(),
+                "CREATE OR REPLACE FUNCTION FUNCTIONNAME("
+                + "PARAM1 VARCHAR2, "
+                + "PARAM2 NUMBER, "
+                + "PARAM3 INTEGER, "
+                + "PARAM4 OUT INTEGER, "
+                + "PARAM5 IN OUT INTEGER) RETURN VARCHAR2"
+                + " IS "
+                + "BEGIN"
+                + " RETURN NULL; "
+                + "END;");
 
     }
-
-	private OracleDbParameterAccessor createParameter(int position, String name, Direction direction, String type) {
-		return new OracleDbParameterAccessor(
-				name, 
-				direction,
-				0, 
-				null,
-				position,
-                null,
-                type, 
-                null);
-	}
 
 }
