@@ -34,9 +34,13 @@ public class ProcedureSpy extends ProcedureStub {
                 
         return inputParameters;
     }
-
+    
+    private String getSpyProcName() {
+        return "SPY_" + name.toUpperCase();
+    }
+    
     public String buildSpyTableDDL() {
-        return "CREATE OR REPLACE TABLE SPY_PROCNAME (\n" + buildSpyColumns() + ")";
+        return "CREATE OR REPLACE TABLE " + getSpyProcName() +" (\n" + buildSpyColumns() + ")";
     }
 
     private String buildSpyColumns() {
@@ -48,7 +52,7 @@ public class ProcedureSpy extends ProcedureStub {
             spyColumns.append(inputParameter.getName());
             spyColumns.append(" ");
             spyColumns.append(((OracleDbParameterAccessor) inputParameter).getOriginalTypeName());
-            spyColumns.append(maxTypeSize(((OracleDbParameterAccessor) inputParameter).getOriginalTypeName()));
+            spyColumns.append(typeMaxSize(((OracleDbParameterAccessor) inputParameter).getOriginalTypeName()));
 
             if (++paramCount < inputParameters.size())
                 spyColumns.append(",");
@@ -57,13 +61,38 @@ public class ProcedureSpy extends ProcedureStub {
         }
         return spyColumns.toString();
     }
-
-    private String maxTypeSize(String originalTypeName) {
+    
+    private String typeMaxSize(String originalTypeName) {
         String maxTypeSize = "";
         if ("VARCHAR2".equals(originalTypeName))
             maxTypeSize = "(4000)";
             
         return maxTypeSize;
+    }
+    
+    @Override
+    protected String buildBody() {
+        String insertIntoSpyTable = "INSERT INTO " + getSpyProcName() +
+                " VALUES (\n" + buildSpyInsertValues() + ");";
+        
+        return insertIntoSpyTable + "\n" + super.buildBody();
+    }
+
+    private String buildSpyInsertValues() {
+        StringBuilder spyColumns = new StringBuilder();
+        List<DbParameterAccessor> inputParameters = getInputParameters();
+        
+        int paramCount = 0;
+        for (DbParameterAccessor inputParameter : inputParameters) {
+            spyColumns.append(inputParameter.getName());
+            
+            if (++paramCount < inputParameters.size())
+                spyColumns.append(",");
+
+            spyColumns.append("\n");
+        }
+        
+        return spyColumns.toString();
     }
 
 }

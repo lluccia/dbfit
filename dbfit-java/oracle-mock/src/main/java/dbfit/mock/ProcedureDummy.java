@@ -11,7 +11,7 @@ import dbfit.util.OracleDbParameterAccessor;
 
 public class ProcedureDummy {
 
-    private String name;
+    protected String name;
     protected Map<String, DbParameterAccessor> allParams = new HashMap<>();
 
     public ProcedureDummy(String name) {
