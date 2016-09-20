@@ -16,6 +16,7 @@ public class OracleMockEnvironment extends OracleEnvironment {
     private static final int MAX_CLOB_LENGTH = 50000;
 
     private Map<String, String> mockedObjects = new HashMap<>();
+    private Map<String, String> spyTables = new HashMap<>();
 
     public OracleMockEnvironment(String driverClassName) {
         super(driverClassName);
@@ -74,9 +75,10 @@ public class OracleMockEnvironment extends OracleEnvironment {
     @Override
     public void closeConnection() throws SQLException {
         restoreMockedObjects();
+        removeSpyTables();
         super.closeConnection();
     }
-
+    
     private void restoreMockedObjects() throws SQLException {
         for (String mockedDDL : mockedObjects.values()) {
             DdlStatementExecution ddl = createDdlStatementExecution(mockedDDL);
@@ -84,8 +86,23 @@ public class OracleMockEnvironment extends OracleEnvironment {
         }
     }
     
-    public void addMockedObject(String name, String ddl) {
-        if (mockedObjects.get(name) == null)
-            this.mockedObjects.put(name, ddl);
+    private void removeSpyTables() throws SQLException {
+        for(String spyTableName: spyTables.values()) {
+            DdlStatementExecution ddl = createDdlStatementExecution("DROP TABLE " + spyTableName);
+            ddl.run();
+        }
+    }
+
+    public void addMockedObject(String procName, String originalDdl) {
+        if (mockedObjects.get(procName) == null)
+            this.mockedObjects.put(procName, originalDdl);
+    }
+    
+    public void addSpyTable(String procName, String spyTableName) {
+        this.spyTables.put(procName, spyTableName);
+    }
+    
+    public String getSpyTable(String procName) {
+        return this.spyTables.get(procName);
     }
 }

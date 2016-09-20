@@ -35,12 +35,12 @@ public class ProcedureSpy extends ProcedureStub {
         return inputParameters;
     }
     
-    private String getSpyProcName() {
+    public String getSpyTableName() {
         return "SPY_" + name.toUpperCase();
     }
     
     public String buildSpyTableDDL() {
-        return "CREATE OR REPLACE TABLE " + getSpyProcName() +" (\n" + buildSpyColumns() + ")";
+        return "CREATE TABLE " + getSpyTableName() +" (\n" + buildSpyColumns() + ")";
     }
 
     private String buildSpyColumns() {
@@ -72,7 +72,7 @@ public class ProcedureSpy extends ProcedureStub {
     
     @Override
     protected String buildBody() {
-        String insertIntoSpyTable = "INSERT INTO " + getSpyProcName() +
+        String insertIntoSpyTable = "INSERT INTO " + getSpyTableName() +
                 " VALUES (\n" + buildSpyInsertValues() + ");";
         
         return insertIntoSpyTable + "\n" + super.buildBody();

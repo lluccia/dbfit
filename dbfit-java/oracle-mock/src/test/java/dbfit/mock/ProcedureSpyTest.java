@@ -21,7 +21,23 @@ public class ProcedureSpyTest {
     }
     
     @Test
-    public void canCreateSpyTableDDL() {
+    public void canCreateSpyTableDDLOneParameter() {
+        ProcedureSpy procedureStub = new ProcedureSpy("procname");
+        
+        Map<String, DbParameterAccessor> paramMap = new HashMap<String, DbParameterAccessor>();
+        paramMap.put("param1", createParameter(0, "PARAM1", Direction.INPUT, "VARCHAR2"));
+        
+        procedureStub.setAllParams(paramMap);
+        
+        assertNormalized(
+                procedureStub.buildSpyTableDDL(),
+                "CREATE TABLE SPY_PROCNAME ("
+                + " PARAM1 VARCHAR2(4000)"
+                + " )");
+    }
+    
+    @Test
+    public void canCreateSpyTableDDLMultipleParameters() {
         ProcedureSpy procedureStub = new ProcedureSpy("procname");
         
         Map<String, DbParameterAccessor> paramMap = new HashMap<String, DbParameterAccessor>();
@@ -34,7 +50,7 @@ public class ProcedureSpyTest {
         
         assertNormalized(
                 procedureStub.buildSpyTableDDL(),
-                "CREATE OR REPLACE TABLE SPY_PROCNAME ("
+                "CREATE TABLE SPY_PROCNAME ("
                 + " PARAM1 VARCHAR2(4000),"
                 + " PARAM2 NUMBER,"
                 + " PARAM3 VARCHAR2(4000)"
